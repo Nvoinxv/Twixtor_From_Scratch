@@ -1,0 +1,408 @@
+# ============================================================
+# PYTHON
+# ============================================================
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python build / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+MANIFEST
+
+# Wheel
+*.whl
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# Ruff
+.ruff_cache/
+
+# Pylint
+.pylint.d/
+
+# Pyright
+.pyright/
+
+# IPython / Jupyter
+.ipynb_checkpoints/
+
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Pip
+pip-wheel-metadata/
+
+# Poetry
+.poetry/
+
+# PDM
+.pdm-python
+.pdm-build/
+
+# Hatch
+.hatch/
+
+# Conda
+.conda/
+conda-env/
+
+# Spyder
+.spyderproject
+.spyproject
+
+# PyCharm Python
+.python-version
+
+
+# ============================================================
+# C / C++
+# ============================================================
+
+# Compiled object files
+*.o
+*.obj
+
+# Static libraries
+*.a
+*.lib
+
+# Shared libraries
+*.so
+*.so.*
+*.dll
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Precompiled headers
+*.gch
+*.pch
+
+# Assembly output
+*.s
+*.asm
+
+# Core dumps
+core
+core.*
+*.core
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+install_manifest.txt
+compile_commands.json
+_deps/
+
+# CMake build directories
+build*/
+cmake-build-*/
+out/
+bin/
+obj/
+
+# Ninja
+.ninja_deps
+.ninja_log
+build.ninja
+rules.ninja
+
+# Autotools
+autom4te.cache/
+aclocal.m4
+config.log
+config.status
+libtool
+Makefile.in
+
+
+# ============================================================
+# C/C++ PACKAGE MANAGERS
+# ============================================================
+
+# Conan
+.conan/
+conanbuild.*
+conaninfo.txt
+conan.lock
+graph_info.json
+
+# vcpkg
+vcpkg_installed/
+.vcpkg-root
+
+# CPM.cmake
+.cpmcache/
+
+
+# ============================================================
+# VISUAL STUDIO
+# ============================================================
+
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio generated files
+Debug/
+Release/
+x64/
+x86/
+ARM/
+ARM64/
+
+# Visual Studio Code C/C++
+.vscode/
+*.code-workspace
+
+
+# ============================================================
+# CLION / JETBRAINS
+# ============================================================
+
+.idea/
+*.iml
+
+
+# ============================================================
+# XCODE
+# ============================================================
+
+DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcuserdatad/
+*.xcuserstate
+
+
+# ============================================================
+# LINUX / MACOS
+# ============================================================
+
+# Linux temporary files
+*~
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# macOS folder attributes
+._*
+
+# Trash
+.Trashes
+
+
+# ============================================================
+# WINDOWS
+# ============================================================
+
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+Desktop.ini
+
+# Windows installer/log files
+*.msi
+*.msix
+*.cab
+*.log
+
+
+# ============================================================
+# EDITORS
+# ============================================================
+
+# Vim
+*.swp
+*.swo
+*.swn
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# VS Code
+.history/
+
+
+# ============================================================
+# LOGS
+# ============================================================
+
+*.log
+logs/
+log/
+
+
+# ============================================================
+# TEMPORARY FILES
+# ============================================================
+
+*.tmp
+*.temp
+*.bak
+*.backup
+*.cache
+
+tmp/
+temp/
+
+
+# ============================================================
+# ENVIRONMENT / SECRETS
+# ============================================================
+
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Local configuration
+config.local.*
+settings.local.*
+
+
+# ============================================================
+# DATABASE / LOCAL DATA
+# ============================================================
+
+*.sqlite
+*.sqlite3
+*.db
+
+# Local data directories
+data/
+local_data/
+
+
+# ============================================================
+# MACHINE LEARNING / DATA SCIENCE
+# ============================================================
+
+# Model files
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+*.joblib
+
+# TensorFlow
+checkpoint
+*.index
+*.meta
+
+# Large datasets
+*.csv
+*.tsv
+*.parquet
+*.feather
+
+# Uncomment these if you DO want to commit datasets:
+# !data/
+# !*.csv
+
+
+# ============================================================
+# JUPYTER / DATA SCIENCE
+# ============================================================
+
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+
+# ============================================================
+# DOCUMENTATION GENERATED FILES
+# ============================================================
+
+docs/_build/
+site/
+.sphinx-build/
+
+
+# ============================================================
+# TEST / BENCHMARK OUTPUT
+# ============================================================
+
+.pytest_cache/
+test-results/
+coverage/
+benchmark_results/
+
+
+# ============================================================
+# GENERATED FILES
+# ============================================================
+
+generated/
+generated_files/
+artifacts/
+artifacts_tmp/
+
+
+# ============================================================
+# LOCAL EXECUTABLES
+# ============================================================
+
+# C/C++ executables
+*.bin
+*.elf
+
+# Python executable/cache artifacts
+*.pyz
+*.pyzw
+
+
+# ============================================================
+# PROJECT-SPECIFIC TEMP FILES
+# ============================================================
+
+*.orig
+*.rej
+*.patch~
