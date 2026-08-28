@@ -25,6 +25,7 @@ add_executable(${PROJECT_NAME}
     src/Resampling_Bilinear.cpp
     src/Kurva_Bezier_Kubik.cpp
     src/Interpolasi_posisi_pixel.cpp
+    src/decoder_video.cpp
 )
 
 # Masukkan folder include DAN src agar header (.hpp) terdeteksi
