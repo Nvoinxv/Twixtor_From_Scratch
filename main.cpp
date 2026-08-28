@@ -88,9 +88,15 @@ int main() {
     Upload_Video upload;
     CURL* curl,
     CURLcode res,
-    std::string nama_video
+    std::string nama_video;
 
-    upload.pengupload_video(curl, res, nama_video);
+    int lebar_video_twixtor = 1920;
+    int tinggi_video_twixtor = 1080;
+
+    pixel video_pixel_twixtor = pixel(lebar_video_twixtor, tinggi_video_twixtor);
+
+    
+
 
     return 0;
 }
