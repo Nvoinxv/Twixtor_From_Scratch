@@ -16,13 +16,13 @@ void Optical_Flow_Differention::hitung_turunan(
     // Yang mana rumusnya seperti ini: f'(x) = (f(x+1) - f(x-1)) / 2
     
     // Mengambil nilai optional RGB
-    auto pixel_sekarang = indeks_pixel.mendapatkan_pixel_3d(x, y, t);
-    auto pixel_masa_depan = indeks_pixel.mendapatkan_pixel_3d(x, y, t + 1);
+    auto indeks_sekarang = indeks_pixel.mendapatkan_pixel_3d(x, y, t);
+    auto indeks_masa_depan = indeks_pixel.mendapatkan_pixel_3d(x, y, t + 1);
     
-    auto pixel_kanan = indeks_pixel.mendapatkan_pixel_2d(x + 1, y);
-    auto pixel_kiri  = indeks_pixel.mendapatkan_pixel_2d(x - 1, y);
-    auto pixel_bawah = indeks_pixel.mendapatkan_pixel_2d(x, y + 1);
-    auto pixel_atas  = indeks_pixel.mendapatkan_pixel_2d(x, y - 1);
+    auto indeks_kanan = indeks_pixel.mendapatkan_pixel_2d(x + 1, y);
+    auto indeks_kiri  = indeks_pixel.mendapatkan_pixel_2d(x - 1, y);
+    auto indeks_bawah = indeks_pixel.mendapatkan_pixel_2d(x, y + 1);
+    auto indeks_atas  = indeks_pixel.mendapatkan_pixel_2d(x, y - 1);
     
     // Ambil nilainya jika ada, atau gunakan nilai default (misal RGB{0,0,0})
     RGB rgb_sekarang = pixel_sekarang.value_or(RGB{0, 0, 0});
