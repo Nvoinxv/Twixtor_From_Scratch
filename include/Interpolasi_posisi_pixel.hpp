@@ -22,9 +22,10 @@ class Interpolasi_Posisi {
     int tinggi;
 
     public:
-    Interpolasi_Posisi(Optical_Flow_Differention& OFD, 
-        int lebar, 
-        int tinggi);
+    Interpolasi_Posisi(
+        Optical_Flow_Differention& OFD, 
+        Decoder_Video& decoder
+    );
     Posisi_2D metode_backward(float x,
     float y,
     float alpha,

@@ -48,7 +48,6 @@ struct Blok_Residual {
 };
 
 // Struktur frame video untuk Decoded Picture Buffer (DPB)
-// Struktur frame video untuk Decoded Picture Buffer (DPB)
 struct Frame_Video {
     int lebar = 0;
     int tinggi = 0;
@@ -171,10 +170,12 @@ public:
     std::vector<RGB> color_conversion(const Frame_Video& frame);
     Mendapatkan_Pixel konversi_ke_objek_pixel(const Frame_Video& frame);
 
-    // Getter untuk dimensi dan status
+    // Setter & Getter untuk dimensi dan frame
+    void atur_dimensi(int w, int h) { lebar = w; tinggi = h; }
     int mendapatkan_lebar() const { return lebar; }
     int mendapatkan_tinggi() const { return tinggi; }
     const std::vector<Frame_Video>& mendapatkan_dpb() const { return dpb_buffer; }
+    Frame_Video buat_frame(int w, int h, uint8_t nilai_awal = 128);
 };
 
 #endif

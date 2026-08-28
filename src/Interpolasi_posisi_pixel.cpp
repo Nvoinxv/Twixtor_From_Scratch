@@ -2,18 +2,17 @@
 
 Interpolasi_Posisi::Interpolasi_Posisi(
     Optical_Flow_Differention& OFD,
-    int lebar,
-    int tinggi
+    Decoder_Video& decoder
 )
-    : ALK(OFD, lebar, tinggi),
+    : ALK(OFD, decoder),
       vx(),
       vy(),
       alpha(0.0f),
       x(0.0f),
       y(0.0f),
       index(0),
-      lebar(lebar),
-      tinggi(tinggi)
+      lebar(decoder.mendapatkan_lebar()),
+      tinggi(decoder.mendapatkan_tinggi())
 {
 }
 

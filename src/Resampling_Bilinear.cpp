@@ -1,33 +1,51 @@
 #include "Resampling_Bilinear.hpp"
 
-Bilinear_resampling::Bilinear_resampling(Optical_Flow_Differention& OFD,
-                                         int lebar,
-                                         int tinggi) 
-    : OFD(OFD), 
-      interpolasi_posisi(OFD, lebar, tinggi), 
+Bilinear_resampling::Bilinear_resampling(
+    Optical_Flow_Differention& ofd,
+    Decoder_Video& decoder
+) 
+    : OFD(ofd), 
+      Decoder(decoder),
+      interpolasi_posisi(ofd, decoder), 
       x(0.0f), y(0.0f),
       delta_x(0.0f), delta_y(0.0f), 
-      lebar(lebar), tinggi(tinggi),
-      pixel(lebar, tinggi) {
-    // kosong
+      lebar(decoder.mendapatkan_lebar()), 
+      tinggi(decoder.mendapatkan_tinggi()) 
+{
+    // Kosong
+}
+
+float Bilinear_resampling::ambil_luma_aman(
+    const Frame_Video& frame,
+    int px,
+    int py
+) const {
+    if (frame.bidang_Y.empty() || frame.lebar <= 0 || frame.tinggi <= 0) {
+        return 0.0f;
+    }
+
+    // Mencegah dead frame dengan membatasi koordinat piksel
+    int cx = std::clamp(px, 0, frame.lebar - 1);
+    int cy = std::clamp(py, 0, frame.tinggi - 1);
+
+    size_t idx = static_cast<size_t>(cy) * frame.lebar + cx;
+    if (idx < frame.bidang_Y.size()) {
+        return static_cast<float>(frame.bidang_Y[idx]);
+    }
+
+    return 0.0f;
 }
 
 Posisi_derifatif Bilinear_resampling::resampling(
     float x,
-    float y
+    float y,
+    const Frame_Video& frame
 ) {
     float alpha = 0.5f;
     int index = static_cast<int>(y) * lebar + static_cast<int>(x);
-    
-    // Ini versi realnya //
+
     std::vector<float> vx = OFD.mendapatkan_Ix();
     std::vector<float> vy = OFD.mendapatkan_Iy();
-
-    /*
-    // Ini versi dummy //
-    std::vector<float> vx(lebar * tinggi, 0.0f);
-    std::vector<float> vy(lebar * tinggi, 0.0f);
-    */
 
     Posisi_2D posisi = interpolasi_posisi.metode_backward(
         x,
@@ -47,21 +65,13 @@ Posisi_derifatif Bilinear_resampling::resampling(
     delta_x = x_source - x0;
     delta_y = y_source - y0;
 
-    // Helper lambda untuk mengambil nilai intensitas pixel (grayscale) secara aman
-    auto get_pixel_value = [this](int px, int py) -> float {
-        auto opt_rgb = pixel.mendapatkan_pixel_2d(px, py);
-        if (opt_rgb.has_value()) {
-            return pixel.ke_grayscale(opt_rgb.value());
-        }
-        return 0.0f;
-    };
+    // Mengambil nilai intensitas piksel dari decoder_video tanpa dead frame
+    float I00 = ambil_luma_aman(frame, static_cast<int>(x0),     static_cast<int>(y0));
+    float I10 = ambil_luma_aman(frame, static_cast<int>(x0) + 1, static_cast<int>(y0));
+    float I01 = ambil_luma_aman(frame, static_cast<int>(x0),     static_cast<int>(y0) + 1);
+    float I11 = ambil_luma_aman(frame, static_cast<int>(x0) + 1, static_cast<int>(y0) + 1);
 
-    float I00 = get_pixel_value(static_cast<int>(x0),     static_cast<int>(y0));
-    float I10 = get_pixel_value(static_cast<int>(x0) + 1, static_cast<int>(y0));
-    float I01 = get_pixel_value(static_cast<int>(x0),     static_cast<int>(y0) + 1);
-    float I11 = get_pixel_value(static_cast<int>(x0) + 1, static_cast<int>(y0) + 1);
-
-    // Hasil perhitungan interpolasi bilinear
+    // Interpolasi bilinear
     float nilai_interpolasi =
         (1.0f - delta_x) * (1.0f - delta_y) * I00
       + delta_x * (1.0f - delta_y) * I10

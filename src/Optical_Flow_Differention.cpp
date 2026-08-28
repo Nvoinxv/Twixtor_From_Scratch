@@ -1,7 +1,7 @@
 #include "Optical_Flow_Differention.hpp"
 
-Optical_Flow_Differention::Optical_Flow_Differention() : Ix(0.0f), Iy(0.0f), It(0.0f) {
-    // Kosong karena hanya konstruktor saja 
+Optical_Flow_Differention::Optical_Flow_Differention() : Ix(), Iy(), It() {
+    // Kosong
 }
 
 float Optical_Flow_Differention::mendapatkan_luma(

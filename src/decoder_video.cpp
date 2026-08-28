@@ -728,3 +728,19 @@ Mendapatkan_Pixel Decoder_Video::konversi_ke_objek_pixel(const Frame_Video& fram
 
     return obj_pixel;
 }
+
+Frame_Video Decoder_Video::buat_frame(int w, int h, uint8_t nilai_awal) {
+    Frame_Video frame;
+    frame.lebar = w;
+    frame.tinggi = h;
+    frame.pts = 0;
+    frame.poc = 0;
+    frame.tipe = Tipe_Frame::I_FRAME;
+    frame.is_referensi = true;
+
+    frame.bidang_Y.resize(w * h, nilai_awal);
+    frame.bidang_U.resize((w / 2) * (h / 2), 128);
+    frame.bidang_V.resize((w / 2) * (h / 2), 128);
+
+    return frame;
+}

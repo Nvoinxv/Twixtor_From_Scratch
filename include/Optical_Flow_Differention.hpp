@@ -11,7 +11,7 @@ private:
     std::vector<float> It;
 
     float mendapatkan_luma(
-        const AVFrame* frame,
+        const Frame_Video& frame,
         int x,
         int y
     ) const;
@@ -20,15 +20,15 @@ public:
     Optical_Flow_Differention();
     
     void hitung_turunan(
-        const AVFrame* frame1,
-        const AVFrame* frame2,
+        const Frame_Video& frame1,
+        const Frame_Video& frame2,
         int x,
         int y
     );
 
-    const std::vector<float> mendapatkan_Ix() const { return Ix; }
-    const std::vector<float> mendapatkan_Iy() const { return Iy; }
-    const std::vector<float> mendapatkan_It() const { return It; }
+    const std::vector<float>& mendapatkan_Ix() const { return Ix; }
+    const std::vector<float>& mendapatkan_Iy() const { return Iy; }
+    const std::vector<float>& mendapatkan_It() const { return It; }
 };
 
 #endif
