@@ -1,21 +1,30 @@
 cmake_minimum_required(VERSION 3.14)
 project(Twixtor_From_Scratch_Cpp VERSION 1.0 LANGUAGES CXX)
 
-# Gunakan standar C++17 (bisa disesuaikan ke 11, 14, 20)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Cari semua file sumber di folder src
-file(GLOB SOURCES "src/*.cpp")
+# Cari libCURL untuk keperluan upload_video
+find_package(CURL REQUIRED)
 
-# Daftarkan file eksekusi beserta file main.cpp dan implementasi di src/
+# Daftarkan seluruh file .cpp secara eksplisit
 add_executable(${PROJECT_NAME}
     main.cpp
-    ${SOURCES}
+    src/Pixel.cpp
+    src/Optical_Flow_Differention.cpp
+    src/Iterasi_Jendela.cpp
+    src/upload_video.cpp
+    src/Resampling_Bilinear.cpp
+    src/Kurva_Bezier_Kubik.cpp
+    src/Interpolasi_posisi_pixel.cpp
 )
 
-# Sertakan direktori header (include/Pixel.hpp)
+# Masukkan folder include DAN src agar header (.hpp) terdeteksi
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
+
+# Link libCURL ke executable
+target_link_libraries(${PROJECT_NAME} PRIVATE CURL::libcurl)

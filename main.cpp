@@ -31,21 +31,29 @@ int main() {
     int total_frame = 150;
     std::vector<float> frame1(lebar * tinggi * total_frame, 100.0f);
     std::vector<float> frame2(lebar * tinggi * total_frame, 130.0f);
+    
+    auto hasil_pixel = pixel.mendapatkan_pixel_2d(x, y);
+    auto hasil_pixel_3d = pixel.mendapatkan_pixel_3d(x, y, t);
 
-    int hasil_pixel = pixel.mendapatkan_pixel_2d(x, y);
-    int hasil_pixel_3d = pixel.mendapatkan_pixel_3d(x, y, t);
+    RGB rgb_2d = hasil_pixel.value_or(RGB{0, 0, 0});
+    RGB rgb_3d = hasil_pixel_3d.value_or(RGB{0, 0, 0});
 
-    std::cout << "HASIL PIXEL 2D: " << hasil_pixel << std::endl;
-    std::cout << "HASIL PIXEL 3D: " << hasil_pixel_3d << std::endl;
+    std::cout << "HASIL PIXEL 2D (R,G,B): " 
+              << (int)rgb_2d.R << ", " << (int)rgb_2d.G << ", " << (int)rgb_2d.B << std::endl;
+    std::cout << "HASIL PIXEL 3D (R,G,B): " 
+              << (int)rgb_3d.R << ", " << (int)rgb_3d.G << ", " << (int)rgb_3d.B << std::endl;
     
     // Kita ingin lihat perbedaan pada turunan Ix dan Iy
     // Karena kita menggunakan data dummy tetapi, jika menggunakan gambar/video bisa skip
     int target_x = 250;
     int target_y = 200;
 
-    float perubahan_pixel_1 = frame1[pixel.mendapatkan_pixel_2d(target_x + 1, target_y)] = 110.0f;
-    float perubahan_pixel_2 = frame1[pixel.mendapatkan_pixel_2d(target_x - 1, target_y)] = 110.0f;
+    size_t idx1 = (static_cast<size_t>(target_y) * lebar + (target_x + 1)) * 3;
+    size_t idx2 = (static_cast<size_t>(target_y) * lebar + (target_x - 1)) * 3;
     
+    float perubahan_pixel_1 = frame1[idx1] = 110.0f;
+    float perubahan_pixel_2 = frame1[idx2] = 110.0f;
+
     float selisih = (perubahan_pixel_1 - perubahan_pixel_2) / 2.0f;
 
     // Hitung Optical Flow
@@ -86,17 +94,14 @@ int main() {
 
     // Melakukan upload pada video 
     Upload_Video upload;
-    CURL* curl,
-    CURLcode res,
+    CURL* curl = nullptr;
+    CURLcode res;
     std::string nama_video;
 
     int lebar_video_twixtor = 1920;
     int tinggi_video_twixtor = 1080;
 
-    pixel video_pixel_twixtor = pixel(lebar_video_twixtor, tinggi_video_twixtor);
-
-    
-
+    Mendapatkan_Pixel video_pixel_twixtor(lebar_video_twixtor, tinggi_video_twixtor);
 
     return 0;
 }

@@ -25,10 +25,23 @@ void Optical_Flow_Differention::hitung_turunan(
     auto indeks_atas  = indeks_pixel.mendapatkan_pixel_2d(x, y - 1);
     
     // Ambil nilainya jika ada, atau gunakan nilai default (misal RGB{0,0,0})
-    RGB rgb_sekarang = pixel_sekarang.value_or(RGB{0, 0, 0});
-    RGB rgb_kanan    = pixel_kanan.value_or(RGB{0, 0, 0});
+    RGB rgb_sekarang = indeks_sekarang.value_or(RGB{0, 0, 0});
+    RGB rgb_masa_depan = indeks_masa_depan.value_or(RGB{0, 0, 0});
 
-    Ix.push_back((frame1[indeks_kanan] - frame1[indeks_kiri]) / 2.0f);
-    Iy.push_back((frame1[indeks_bawah] - frame1[indeks_atas]) / 2.0f);
-    It.push_back((frame2[indeks_masa_depan] - frame1[indeks_sekarang]) / 2.0f);
+    RGB rgb_kanan = indeks_kanan.value_or(RGB{0, 0, 0});
+    RGB rgb_kiri = indeks_kiri.value_or(RGB{0,0,0});
+    RGB rgb_atas = indeks_atas.value_or(RGB{0, 0, 0});
+    RGB rgb_bawah = indeks_bawah.value_or(RGB{0,0,0});
+
+    float I_kanan = indeks_pixel.ke_grayscale(rgb_kanan);
+    float I_kiri = indeks_pixel.ke_grayscale(rgb_kiri);
+    float I_atas = indeks_pixel.ke_grayscale(rgb_atas);
+    float I_bawah = indeks_pixel.ke_grayscale(rgb_bawah);
+
+    float I_sekarang = indeks_pixel.ke_grayscale(rgb_sekarang);
+    float I_masa_depan = indeks_pixel.ke_grayscale(rgb_masa_depan);
+
+    Ix.push_back((I_kanan - I_kiri) / 2.0f);
+    Iy.push_back((I_bawah - I_atas) / 2.0f);
+    It.push_back(I_masa_depan - I_sekarang);
 }

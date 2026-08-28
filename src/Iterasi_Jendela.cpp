@@ -96,20 +96,18 @@ void Algoritma_Lucas_Kanade::Operasi_Matrix(int x, int y)
 
     float invers_determinan = 1.0f / determinan;
 
-    float vx_sekarang =
-        invers_determinan *
-        ((d * e) - (b * f));
+    float vx_sekarang = invers_determinan * ((d * e) - (b * f));
+    float vy_sekarang = invers_determinan * ((a * f) - (c * e));
 
-    float vy_sekarang =
-        invers_determinan *
-        ((a * f) - (c * e));
+    // Ambil nilai lebar dari member Pixel
+    int lebar_frame = Pixel.mendapatkan_lebar(); 
 
-    // x dan y adalah koordinat pixel
-    int index = Pixel.mendapatkan_pixel_2d(x, y);
+    // Kalkulasi index flat 1D (row-major order)
+    size_t index = static_cast<size_t>(y) * lebar_frame + x;
 
     if (index >= vx.size()) {
-        vx.resize(index + 1);
-        vy.resize(index + 1);
+        vx.resize(index + 1, 0.0f);
+        vy.resize(index + 1, 0.0f);
     }
 
     vx[index] = vx_sekarang;

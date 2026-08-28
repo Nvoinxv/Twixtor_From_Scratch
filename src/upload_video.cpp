@@ -1,51 +1,48 @@
 #include "upload_video.hpp"
 
-Upload_Video::Upload_Video() : curl(), res(), nama_video {
+Upload_Video::Upload_Video() : curl(nullptr), res(CURLE_OK), nama_video("") {
     // Kosong
 }
 
 void Upload_Video::pengupload_video(
-    CURL* curl,
-    CURLcode res,
-    std::string nama_video
+    CURL* curl_param,
+    CURLcode res_param,
+    std::string nama_video_param
 ) {
     curl_global_init(CURL_GLOBAL_DEFAULT);
 
-    curl = curl_easy_init();
+    this->curl = curl_easy_init();
 
-    if (curl) {
-        curl_easy_setopt(curl, CURLOPT_URL,
-                         "http://localhost:3000/upload");
+    if (this->curl) {
+        curl_easy_setopt(this->curl, CURLOPT_URL, "http://localhost:3000/upload");
+        curl_easy_setopt(this->curl, CURLOPT_POST, 1L);
 
-        curl_easy_setopt(curl, CURLOPT_POST, 1L);
-
-        curl_mime* mime = curl_mime_init(curl);
-
+        curl_mime* mime = curl_mime_init(this->curl);
         curl_mimepart* part = curl_mime_addpart(mime);
 
         curl_mime_name(part, "video");
         
         std::cout << "Masukkan nama file video: ";
-        std::cin >> nama_video;
+        std::cin >> this->nama_video;
         
-        curl_mime_filedata(part, nama_video);
+        curl_mime_filedata(part, this->nama_video.c_str());
 
         std::cout << std::endl;
 
-        curl_easy_setopt(curl, CURLOPT_MIMEPOST, mime);
+        curl_easy_setopt(this->curl, CURLOPT_MIMEPOST, mime);
 
-        res = curl_easy_perform(curl);
+        this->res = curl_easy_perform(this->curl);
 
-        if (res != CURLE_OK) {
+        if (this->res != CURLE_OK) {
             std::cerr << "Upload gagal: "
-                      << curl_easy_strerror(res)
+                      << curl_easy_strerror(this->res)
                       << '\n';
         } else {
             std::cout << "Upload berhasil!\n";
         }
 
         curl_mime_free(mime);
-        curl_easy_cleanup(curl);
+        curl_easy_cleanup(this->curl);
     }
 
     curl_global_cleanup();
