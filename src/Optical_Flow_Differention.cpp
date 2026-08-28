@@ -14,14 +14,19 @@ void Optical_Flow_Differention::hitung_turunan(
 ) {
     // Ini mengambil pendekatan central difference
     // Yang mana rumusnya seperti ini: f'(x) = (f(x+1) - f(x-1)) / 2
-    int indeks_sekarang = indeks_pixel.mendapatkan_pixel_3d(x, y, t);
-    int indeks_masa_depan = indeks_pixel.mendapatkan_pixel_3d(x, y, t + 1);
-
-    int indeks_kanan = indeks_pixel.mendapatkan_pixel_2d(x + 1, y);
-    int indeks_kiri = indeks_pixel.mendapatkan_pixel_2d(x - 1, y);
-
-    int indeks_bawah = indeks_pixel.mendapatkan_pixel_2d(x, y + 1);
-    int indeks_atas = indeks_pixel.mendapatkan_pixel_2d(x, y - 1);
+    
+    // Mengambil nilai optional RGB
+    auto pixel_sekarang = indeks_pixel.mendapatkan_pixel_3d(x, y, t);
+    auto pixel_masa_depan = indeks_pixel.mendapatkan_pixel_3d(x, y, t + 1);
+    
+    auto pixel_kanan = indeks_pixel.mendapatkan_pixel_2d(x + 1, y);
+    auto pixel_kiri  = indeks_pixel.mendapatkan_pixel_2d(x - 1, y);
+    auto pixel_bawah = indeks_pixel.mendapatkan_pixel_2d(x, y + 1);
+    auto pixel_atas  = indeks_pixel.mendapatkan_pixel_2d(x, y - 1);
+    
+    // Ambil nilainya jika ada, atau gunakan nilai default (misal RGB{0,0,0})
+    RGB rgb_sekarang = pixel_sekarang.value_or(RGB{0, 0, 0});
+    RGB rgb_kanan    = pixel_kanan.value_or(RGB{0, 0, 0});
 
     Ix.push_back((frame1[indeks_kanan] - frame1[indeks_kiri]) / 2.0f);
     Iy.push_back((frame1[indeks_bawah] - frame1[indeks_atas]) / 2.0f);

@@ -2,6 +2,7 @@
 #define PIXEL_HPP
 
 #include <vector>
+#include <optional>
 
 struct RGB {
     unsigned char R;
@@ -21,8 +22,8 @@ public:
     Mendapatkan_Pixel(int w, int h);
 
     // Mengembalikan indeks 1D tunggal (int)
-    RGB mendapatkan_pixel_2d(int x, int y) const;
-    RGB mendapatkan_pixel_3d(int x, int y, int t) const;
+    std::optional<RGB> mendapatkan_pixel_2d(int x, int y) const;
+    std::optional<RGB> mendapatkan_pixel_3d(int x, int y, int t) const;
 };
 
 #endif 
