@@ -34,7 +34,9 @@ class Persamaan_Bazier {
 
     float Turunan_xt_dt();
 
-    Posisi_Turunan_Bazier Iterasi_Newton();
+    float Iterasi_Newton();
 
     Posisi_Turunan_Bazier Turunan_Velocity_Kurva_Bazier();
-}
+};
+
+#endif

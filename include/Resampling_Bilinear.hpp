@@ -3,6 +3,7 @@
 
 #include "Interpolasi_posisi_pixel.hpp"
 #include "Optical_Flow_Differention.hpp"
+#include "Pixel.hpp"
 #include <cmath>
 
 struct Posisi_derifatif {
@@ -13,12 +14,13 @@ struct Posisi_derifatif {
 class Bilinear_resampling {
     private:
     float delta_x;
-    float delat_y;
+    float delta_y;
     float x;
     float y;
     int lebar;
     int tinggi;
     Optical_Flow_Differention& OFD;
+    Mendapatkan_Pixel pixel;
     Interpolasi_Posisi interpolasi_posisi;
     
     public:
@@ -30,6 +32,6 @@ class Bilinear_resampling {
         float x,
         float y
     );
-}
+};
 
 #endif

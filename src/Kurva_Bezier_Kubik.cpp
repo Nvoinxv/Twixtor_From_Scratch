@@ -15,13 +15,17 @@ float Persamaan_Bazier::Qubic_Bazier() {
         std::cout << "Variabel (t): " << t << std::endl;
     };
     
-    float fungsi_x_t = [([(1.0 - t) * (1.0 - t) * (1 - t)] * x0) +
-    (3.0 * (1.0 - t) * (1.0 - t) * t * x1) + (3 * (1.0 - t) * t * t * x2) +
-    [(t * t * t) * x3]];
+    float fungsi_x_t = (((1.0f - t) * (1.0f - t) * (1.0f - t)) * x0) +
+                       (3.0f * (1.0f - t) * (1.0f - t) * t * x1) + 
+                       (3.0f * (1.0f - t) * t * t * x2) +
+                       ((t * t * t) * x3);
 
-    float fungsi_y_t = [([(1.0 - t) * (1.0 - t) * (1.0 - t)] * y0) +
-    (3.0 * (1.0 - t) * (1.0 - t) * t * y1) + (3 * (1.0 - t) * t * t * y2) +
-    [(t * t * t) * y3]];
+    float fungsi_y_t = (((1.0f - t) * (1.0f - t) * (1.0f - t)) * y0) +
+                       (3.0f * (1.0f - t) * (1.0f - t) * t * y1) + 
+                       (3.0f * (1.0f - t) * t * t * y2) +
+                       ((t * t * t) * y3);
+
+    return fungsi_x_t;
 }
 
 float Persamaan_Bazier::Turunan_xt_dt() {
@@ -33,8 +37,9 @@ float Persamaan_Bazier::Turunan_xt_dt() {
         std::cout << "Hasil variabel (t): " << t << std::endl;
     };
 
-    float turunan_xt_dt = [3.0 * [(1.0 - t) * (1.0 - t)] * x1 + 
-    6.0 * (1-t) * t * (x2 - x1) + 3.0 * (t * t) * (1.0 - x2)];
+    float turunan_xt_dt = 3.0f * ((1.0f - t) * (1.0f - t)) * (x1 - x0) + 
+                          6.0f * (1.0f - t) * t * (x2 - x1) + 
+                          3.0f * (t * t) * (x3 - x2);
 
     return turunan_xt_dt;
 }
@@ -48,15 +53,17 @@ float Persamaan_Bazier::Iterasi_Newton() {
         std::cout << "Variabel (t): " << t << std::endl;
     };
 
-    float hasil;
-    float x_turunan = Turunan_xt_dt();
-    Qubic_Bazier.fungsi_x_t x_t;
+    float t_curr = t;
+    for (int i = 0; i < n; i++) {
+        float x_t = Qubic_Bazier();
+        float x_turunan = Turunan_xt_dt();
 
-    for (int i = 0; i < n + 1; i++) {
-        hasil = t[i] - (x_t[i] - x_target[i]) / x_turunan[i];
-    };
+        if (std::abs(x_turunan) < 1e-6f) break; // Mencegah pembagian dengan nol
 
-    return hasil;
+        t_curr = t_curr - (x_t - x_target) / x_turunan;
+    }
+
+    return t_curr;
 }
 
 Posisi_Turunan_Bazier Persamaan_Bazier::Turunan_Velocity_Kurva_Bazier() {
@@ -70,13 +77,13 @@ Posisi_Turunan_Bazier Persamaan_Bazier::Turunan_Velocity_Kurva_Bazier() {
     
     Posisi_Turunan_Bazier velocity;
 
-    velocity dxdt = [3.0 * ((1.0 - t) * (1.0 - t)) * (x1 - x0) +
-    6.0 * (1.0 - t) * t * (x2 - x1) +
-    3.0 * (t * t) * (x3 - x2)];
+    velocity.dxdt = 3.0f * ((1.0f - t) * (1.0f - t)) * (x1 - x0) +
+                    6.0f * (1.0f - t) * t * (x2 - x1) +
+                    3.0f * (t * t) * (x3 - x2);
 
-    velocity dydt = [3.0 * ((1.0 - t) 8 (1.0 - t)) * (y1 - y0) +
-    6.0 8 (1.0 - t) 8 t * (y2 - y1) + 
-    3.0 * (t * t) * (y3 - y2)];
+    velocity.dydt = 3.0f * ((1.0f - t) * (1.0f - t)) * (y1 - y0) +
+                    6.0f * (1.0f - t) * t * (y2 - y1) + 
+                    3.0f * (t * t) * (y3 - y2);
 
     return velocity;
 }
