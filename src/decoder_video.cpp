@@ -12,10 +12,6 @@ static inline uint8_t batasi_uint8(T nilai) {
     return static_cast<uint8_t>(nilai);
 }
 
-// -------------------------------------------------------------
-// Konstruktor dan Destruktor
-// -------------------------------------------------------------
-
 Decoder_Video::Decoder_Video() 
     : nama_video(""),
       format_ctx(nullptr),
@@ -46,10 +42,6 @@ Decoder_Video::~Decoder_Video() {
         format_ctx = nullptr;
     }
 }
-
-// -------------------------------------------------------------
-// 1. Demuxing & NAL Parsing
-// -------------------------------------------------------------
 
 bool Decoder_Video::buka_video(const std::string& nama_file) {
     this->nama_video = nama_file;
@@ -249,9 +241,6 @@ void Decoder_Video::demuxing_dan_parsing_video() {
     av_packet_free(&paket);
 }
 
-// -------------------------------------------------------------
-// 2. Entropy Decoding & Bitstream Reader
-// -------------------------------------------------------------
 
 uint64_t Decoder_Video::membaca_bit(const uint8_t* data, size_t& bit_offset) {
     size_t byte_idx = bit_offset / 8;
@@ -346,10 +335,6 @@ void Decoder_Video::Entropy_decoding(
     }
 }
 
-// -------------------------------------------------------------
-// 3. Inverse Quantization & Inverse Transform (IQ/IT)
-// -------------------------------------------------------------
-
 void Decoder_Video::invers_quantization(Blok_Residual& blok, int qp) {
     int n = blok.ukuran;
     int total_elemen = n * n;
@@ -412,10 +397,6 @@ void Decoder_Video::Invers_Transform(Blok_Residual& blok) {
         }
     }
 }
-
-// -------------------------------------------------------------
-// 4. Rekonstruksi Piksel (Prediksi & Penggabungan)
-// -------------------------------------------------------------
 
 void Decoder_Video::rekonstruksi_intra(
     std::vector<uint8_t>& bidang_y,
@@ -588,10 +569,6 @@ void Decoder_Video::Rekonstruksi_piksel(
     }
 }
 
-// -------------------------------------------------------------
-// 5. In-Loop Filtering
-// -------------------------------------------------------------
-
 void Decoder_Video::deblocking_filter(
     std::vector<uint8_t>& bidang,
     int lebar_bidang,
@@ -606,7 +583,7 @@ void Decoder_Video::deblocking_filter(
     int beta  = std::min(255, 2 + (qp / 4));
     int c0    = std::max(1, qp / 8);
 
-    // 1. Deblocking pada batas vertikal antar-blok
+    // Deblocking pada batas vertikal antar-blok
     for (int x = ukuran_blok; x < lebar_bidang; x += ukuran_blok) {
         for (int y = 0; y < tinggi_bidang; y++) {
             size_t p0_idx = static_cast<size_t>(y) * lebar_bidang + (x - 1);
@@ -628,7 +605,7 @@ void Decoder_Video::deblocking_filter(
         }
     }
 
-    // 2. Deblocking pada batas horizontal antar-blok
+    // Deblocking pada batas horizontal antar-blok
     for (int y = ukuran_blok; y < tinggi_bidang; y += ukuran_blok) {
         for (int x = 0; x < lebar_bidang; x++) {
             size_t p0_idx = static_cast<size_t>(y - 1) * lebar_bidang + x;
@@ -682,18 +659,12 @@ void Decoder_Video::sample_adaptive_offset(
 }
 
 void Decoder_Video::Pengulangan_filtering(Frame_Video& frame, int qp) {
-    // 1. Deblocking Filter pada komponen Luminance dan Chrominance
     deblocking_filter(frame.bidang_Y, frame.lebar, frame.tinggi, 4, qp);
     deblocking_filter(frame.bidang_U, frame.lebar / 2, frame.tinggi / 2, 4, qp);
     deblocking_filter(frame.bidang_V, frame.lebar / 2, frame.tinggi / 2, 4, qp);
-
-    // 2. Sample Adaptive Offset (SAO) untuk mereduksi artefak ringing
     sample_adaptive_offset(frame.bidang_Y, frame.lebar, frame.tinggi, 1);
 }
 
-// -------------------------------------------------------------
-// 6. Frame Buffering (DPB) & Color Conversion
-// -------------------------------------------------------------
 
 void Decoder_Video::frame_buffering(const Frame_Video& frame) {
     dpb_buffer.push_back(frame);

@@ -21,45 +21,44 @@ extern "C" {
 
 // Tipe frame video
 enum class Tipe_Frame {
-    I_FRAME, // Intra-frame (Keyframe)
-    P_FRAME, // Predicted frame (Forward prediction)
-    B_FRAME  // Bi-directional predicted frame
+    I_FRAME, 
+    P_FRAME, 
+    B_FRAME  
 };
 
 // Mode prediksi intra untuk spatial prediction
 enum class Mode_Prediksi_Intra {
-    DC,          // Rata-rata dari tetangga atas dan kiri
-    VERTIKAL,    // Menyalin piksel baris atas ke bawah
-    HORIZONTAL,  // Menyalin piksel kolom kiri ke kanan
-    PLANAR       // Interpolasi bilinear permukaan lembut
+    DC,          
+    VERTIKAL,    
+    HORIZONTAL,  
+    PLANAR       
 };
 
 // Struktur vektor pergerakan (Motion Vector) untuk Inter Prediction
 struct Vektor_Pergerakan {
-    int mv_x = 0; // Pergeseran horizontal
-    int mv_y = 0; // Pergeseran vertikal
-};
+    int mv_x = 0; 
+    int mv_y = 0;
 
 // Struktur blok residual untuk proses IQ/IT
 struct Blok_Residual {
-    int ukuran = 4;                               // Ukuran blok (misal 4x4 atau 8x8)
-    std::vector<int> koefisien_frekuensi;         // Hasil entropy decoding (domain frekuensi)
-    std::vector<float> koefisien_dekuantisasi;    // Hasil inverse quantization (IQ)
-    std::vector<int> data_residual;               // Hasil inverse transform / IDCT (domain spasial)
+    int ukuran = 4;                               
+    std::vector<int> koefisien_frekuensi;         
+    std::vector<float> koefisien_dekuantisasi;    
+    std::vector<int> data_residual;              
 };
 
 // Struktur frame video untuk Decoded Picture Buffer (DPB)
 struct Frame_Video {
     int lebar = 0;
     int tinggi = 0;
-    int64_t pts = 0;                              // Presentation Time Stamp
-    int64_t poc = 0;                              // Picture Order Count
+    int64_t pts = 0;                              
+    int64_t poc = 0;                            
     Tipe_Frame tipe = Tipe_Frame::I_FRAME;
     bool is_referensi = true;
 
-    std::vector<uint8_t> bidang_Y;                // Komponen Luma (lebar * tinggi)
-    std::vector<uint8_t> bidang_U;                // Komponen Chroma Cb ((lebar/2) * (tinggi/2))
-    std::vector<uint8_t> bidang_V;                // Komponen Chroma Cr ((lebar/2) * (tinggi/2))
+    std::vector<uint8_t> bidang_Y;                
+    std::vector<uint8_t> bidang_U;               
+    std::vector<uint8_t> bidang_V;             
 };
 
 // Struktur unit NAL (Network Abstraction Layer)
@@ -70,7 +69,7 @@ struct NALUnit {
     bool is_keyframe = false;
     
     int lebar = 0;
-    int panjang = 0; // Tinggi
+    int panjang = 0;
     int frame_rate = 0;
 };
 
@@ -81,7 +80,7 @@ private:
     int video_stream_idx = -1;
     int lebar = 0;
     int tinggi = 0;
-    int qp_default = 24; // Quantization Parameter default
+    int qp_default = 24; 
 
     // Decoded Picture Buffer (DPB) untuk menampung frame sebelum ditampilkan
     std::vector<Frame_Video> dpb_buffer;
@@ -92,7 +91,7 @@ public:
     Decoder_Video(const std::string& nama_file_video);
     ~Decoder_Video();
 
-    // 1. Demuxing & NAL Parsing
+    // Demuxing & NAL Parsing
     bool buka_video(const std::string& nama_file);
     void demuxing();
     void demuxing_dan_parsing_video();
@@ -101,7 +100,7 @@ public:
     void parseSPS(const uint8_t* data, int ukuran, NALUnit& nal);
     void parsePPS(const uint8_t* data, int ukuran, NALUnit& nal);
 
-    // 2. Entropy Decoding & Bitstream Reader
+    // Entropy Decoding & Bitstream Reader
     uint64_t membaca_bit(const uint8_t* data, size_t& bit_offset);
     uint32_t membaca_bits(const uint8_t* data, size_t& bit_offset, int jumlah_bit);
     uint32_t membaca_ue(const uint8_t* data, size_t& bit_offset); // Unsigned Exponential-Golomb
@@ -114,11 +113,11 @@ public:
         int jumlah_blok
     );
 
-    // 3. Inverse Quantization & Inverse Transform (IQ/IT)
+    // Inverse Quantization & Inverse Transform (IQ/IT)
     void invers_quantization(Blok_Residual& blok, int qp);
     void Invers_Transform(Blok_Residual& blok);
 
-    // 4. Rekonstruksi Piksel (Prediksi & Penggabungan)
+    // Rekonstruksi Piksel (Prediksi & Penggabungan)
     void rekonstruksi_intra(
         std::vector<uint8_t>& bidang_y,
         int blok_x,
@@ -147,7 +146,7 @@ public:
         const Frame_Video* frame_ref_sebelumnya = nullptr
     );
 
-    // 5. In-Loop Filtering
+    // In-Loop Filtering
     void deblocking_filter(
         std::vector<uint8_t>& bidang,
         int lebar_bidang,
@@ -165,7 +164,7 @@ public:
 
     void Pengulangan_filtering(Frame_Video& frame, int qp);
 
-    // 6. Frame Buffering (DPB) & Color Conversion
+    // Frame Buffering (DPB) & Color Conversion
     void frame_buffering(const Frame_Video& frame);
     std::vector<Frame_Video> ambil_frame_urut_pts();
     std::vector<RGB> color_conversion(const Frame_Video& frame);

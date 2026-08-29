@@ -4,44 +4,73 @@ Optical_Flow_Differention::Optical_Flow_Differention() : Ix(0.0f), Iy(0.0f), It(
     // Kosong karena hanya konstruktor saja 
 }
 
-void Optical_Flow_Differention::hitung_turunan(
-    const std::vector<float>& frame1,
-    const std::vector<float>& frame2,
-    const Mendapatkan_Pixel& indeks_pixel,
+float Optical_Flow_Differention::mendapatkan_luma(
+    const AVFrame* frame,
     int x,
-    int y,
-    int t
+    int y
+) const
+{
+    if (frame == nullptr) {
+        return 0.0f;
+    }
+
+    if (x < 0 || x >= frame->width ||
+        y < 0 || y >= frame->height) {
+        return 0.0f;
+    }
+
+    /*
+     * Untuk AV_PIX_FMT_YUV420P:
+     *
+     * data[0] = Y plane
+     * linesize[0] = ukuran sebenarnya satu baris
+     */
+
+    return static_cast<float>(
+        frame->data[0][y * frame->linesize[0] + x]
+    );
+}
+
+void Optical_Flow_Differention::hitung_turunan(
+    const AVFrame* frame1,
+    const AVFrame* frame2,
+    int x,
+    int y
 ) {
-    // Ini mengambil pendekatan central difference
-    // Yang mana rumusnya seperti ini: f'(x) = (f(x+1) - f(x-1)) / 2
-    
-    // Mengambil nilai optional RGB
-    auto indeks_sekarang = indeks_pixel.mendapatkan_pixel_3d(x, y, t);
-    auto indeks_masa_depan = indeks_pixel.mendapatkan_pixel_3d(x, y, t + 1);
-    
-    auto indeks_kanan = indeks_pixel.mendapatkan_pixel_2d(x + 1, y);
-    auto indeks_kiri  = indeks_pixel.mendapatkan_pixel_2d(x - 1, y);
-    auto indeks_bawah = indeks_pixel.mendapatkan_pixel_2d(x, y + 1);
-    auto indeks_atas  = indeks_pixel.mendapatkan_pixel_2d(x, y - 1);
-    
-    // Ambil nilainya jika ada, atau gunakan nilai default (misal RGB{0,0,0})
-    RGB rgb_sekarang = indeks_sekarang.value_or(RGB{0, 0, 0});
-    RGB rgb_masa_depan = indeks_masa_depan.value_or(RGB{0, 0, 0});
+    if (frame1 == nullptr || frame2 == nullptr) {
+        return;
+    }
 
-    RGB rgb_kanan = indeks_kanan.value_or(RGB{0, 0, 0});
-    RGB rgb_kiri = indeks_kiri.value_or(RGB{0,0,0});
-    RGB rgb_atas = indeks_atas.value_or(RGB{0, 0, 0});
-    RGB rgb_bawah = indeks_bawah.value_or(RGB{0,0,0});
+    float I_kanan =
+        mendapatkan_luma(frame1, x + 1, y);
 
-    float I_kanan = indeks_pixel.ke_grayscale(rgb_kanan);
-    float I_kiri = indeks_pixel.ke_grayscale(rgb_kiri);
-    float I_atas = indeks_pixel.ke_grayscale(rgb_atas);
-    float I_bawah = indeks_pixel.ke_grayscale(rgb_bawah);
+    float I_kiri =
+        mendapatkan_luma(frame1, x - 1, y);
 
-    float I_sekarang = indeks_pixel.ke_grayscale(rgb_sekarang);
-    float I_masa_depan = indeks_pixel.ke_grayscale(rgb_masa_depan);
 
-    Ix.push_back((I_kanan - I_kiri) / 2.0f);
-    Iy.push_back((I_bawah - I_atas) / 2.0f);
-    It.push_back(I_masa_depan - I_sekarang);
+    float I_bawah =
+        mendapatkan_luma(frame1, x, y + 1);
+
+    float I_atas =
+        mendapatkan_luma(frame1, x, y - 1);
+
+
+    float I_sekarang =
+        mendapatkan_luma(frame1, x, y);
+
+    float I_masa_depan =
+        mendapatkan_luma(frame2, x, y);
+
+    float ix =
+        (I_kanan - I_kiri) / 2.0f;
+
+    float iy =
+        (I_bawah - I_atas) / 2.0f;
+
+    float it =
+        I_masa_depan - I_sekarang;
+
+    Ix.push_back(ix);
+    Iy.push_back(iy);
+    It.push_back(it);
 }
