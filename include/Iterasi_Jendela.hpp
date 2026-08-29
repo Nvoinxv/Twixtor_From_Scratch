@@ -2,14 +2,16 @@
 #define ITERASI_JENDELA_HPP
 
 #include "Optical_Flow_Differention.hpp"
-#include "Pixel.hpp"
+#include "decoder_video.hpp"
+
 #include <cmath>
 #include <iostream>
+#include <vector>
 
 class Algoritma_Lucas_Kanade {
 private:
     Optical_Flow_Differention OFD;
-    Mendapatkan_Pixel Pixel;
+    Decoder_Video& Decoder;
 
     std::vector<float> Ix;
     std::vector<float> Iy;
@@ -22,7 +24,10 @@ private:
     int y;
 
 public:
-    Algoritma_Lucas_Kanade(Optical_Flow_Differention& ofd, int lebar, int tinggi);
+    Algoritma_Lucas_Kanade(
+        Optical_Flow_Differention& ofd,
+        Decoder_Video& decoder
+    );
 
     float penjumlahan_Ix_pangkat_2();
 
@@ -36,11 +41,12 @@ public:
 
     void Operasi_Matrix(int x, int y);
 
-    const std::vector<float> mendapatkan_vx() const {
+    const std::vector<float>& mendapatkan_vx() const {
         return vx;
     }
-    const std::vector<float> mendapatkan_vy() const { 
-        return vy; 
+
+    const std::vector<float>& mendapatkan_vy() const {
+        return vy;
     }
 };
 
