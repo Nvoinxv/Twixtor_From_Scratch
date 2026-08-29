@@ -14,6 +14,8 @@ class Upload_Video {
     public:
     Upload_Video();
     
+    bool pengupload_video(const std::string& nama_video_param);
+
     void pengupload_video(
         CURL* curl,
         CURLcode res,
