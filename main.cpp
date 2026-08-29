@@ -26,6 +26,7 @@ int main(int argc, char* argv[]) {
             daftar_video.push_back(argv[i]);
         }
     } else {
+        // Dummy data //
         daftar_video = {"video_action.mp4", "video_cinematic.mp4", "video_sports.mp4"};
     }
 

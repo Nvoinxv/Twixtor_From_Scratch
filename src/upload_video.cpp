@@ -16,7 +16,7 @@ bool Upload_Video::pengupload_video(const std::string& nama_video_param) {
 
     bool status = false;
     if (this->curl) {
-        curl_easy_setopt(this->curl, CURLOPT_URL, "http://localhost:3000/upload");
+        curl_easy_setopt(this->curl, CURLOPT_URL, "http://localhost:8000/upload");
         curl_easy_setopt(this->curl, CURLOPT_POST, 1L);
 
         curl_mime* mime = curl_mime_init(this->curl);
@@ -74,7 +74,7 @@ bool Upload_Video::pengupload_video_multi(const std::vector<std::string>& daftar
 
     bool status = false;
     if (this->curl) {
-        curl_easy_setopt(this->curl, CURLOPT_URL, "http://localhost:3000/upload");
+        curl_easy_setopt(this->curl, CURLOPT_URL, "http://localhost:8000/upload");
         curl_easy_setopt(this->curl, CURLOPT_POST, 1L);
 
         curl_mime* mime = curl_mime_init(this->curl);
