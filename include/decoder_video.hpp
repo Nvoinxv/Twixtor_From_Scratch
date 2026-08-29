@@ -13,6 +13,7 @@ extern "C" {
 #include <string>
 #include <vector>
 #include <fstream>
+#include <cstdint>
 
 class Decoder_Video {
     private:
@@ -24,7 +25,7 @@ class Decoder_Video {
     int video_stream_idx;
     
     struct NALUnit {
-        uint8_t* data;         
+        uint64_t* data;         
         int ukuran;               
         int tipe_data;               
         bool is_keyframe;      
@@ -38,10 +39,12 @@ class Decoder_Video {
     Decoder_video();
 
     void demuxing();
-    void parseSPS(const uint8_t* data, int ukuran, NALUnit& nal);
-    void parsePPS(const uint8_t* data, int ukuran, NALUnit& nal);
-    void parseNALUnits(const uint8_t* data, int ukuran);
-    int mendapatkan_NALType(uint8_t* data, int ukuran);
+    void parseSPS(const uint64_t* data, int ukuran, NALUnit& nal);
+    void parsePPS(const uint64_t* data, int ukuran, NALUnit& nal);
+    void parseNALUnits(const uint64_t* data, int ukuran);
+    int mendapatkan_NALType(uint64_t* data, int ukuran);
+
+    uint64_t membaca_bit()
 
     void Entropy_decoding();
 
