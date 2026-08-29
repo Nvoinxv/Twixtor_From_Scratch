@@ -40,6 +40,7 @@ class Decoder_Video {
     void demuxing();
     void parseSPS(const uint8_t* data, int ukuran, NALUnit& nal);
     void parsePPS(const uint8_t* data, int ukuran, NALUnit& nal);
+    void parseNALUnits(const uint8_t* data, int ukuran);
     int mendapatkan_NALType(uint8_t* data, int ukuran);
 
     void Entropy_decoding();
