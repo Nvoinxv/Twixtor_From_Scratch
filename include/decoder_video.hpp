@@ -38,7 +38,7 @@ enum class Mode_Prediksi_Intra {
 struct Vektor_Pergerakan {
     int mv_x = 0; 
     int mv_y = 0;
-
+};
 // Struktur blok residual untuk proses IQ/IT
 struct Blok_Residual {
     int ukuran = 4;                               
@@ -48,17 +48,18 @@ struct Blok_Residual {
 };
 
 // Struktur frame video untuk Decoded Picture Buffer (DPB)
+// Struktur frame video untuk Decoded Picture Buffer (DPB)
 struct Frame_Video {
     int lebar = 0;
     int tinggi = 0;
-    int64_t pts = 0;                              
-    int64_t poc = 0;                            
+    int64_t pts = 0;
+    int64_t poc = 0;
     Tipe_Frame tipe = Tipe_Frame::I_FRAME;
     bool is_referensi = true;
 
-    std::vector<uint8_t> bidang_Y;                
-    std::vector<uint8_t> bidang_U;               
-    std::vector<uint8_t> bidang_V;             
+    std::vector<uint8_t> bidang_Y;
+    std::vector<uint8_t> bidang_U;
+    std::vector<uint8_t> bidang_V;
 };
 
 // Struktur unit NAL (Network Abstraction Layer)

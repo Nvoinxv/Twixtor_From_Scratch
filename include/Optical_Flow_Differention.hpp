@@ -1,13 +1,8 @@
 #ifndef OPTICAL_FLOW_DIFFERENTION_HPP
 #define OPTICAL_FLOW_DIFFERENTION_HPP
 
-#include "Pixel.hpp"
 #include "decoder_video.hpp"
 #include <vector>
-
-extern "C" {
-#include <libavutil/frame.h>
-}
 
 class Optical_Flow_Differention {
 private:

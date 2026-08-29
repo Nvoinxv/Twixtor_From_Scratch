@@ -5,55 +5,47 @@ Optical_Flow_Differention::Optical_Flow_Differention() : Ix(0.0f), Iy(0.0f), It(
 }
 
 float Optical_Flow_Differention::mendapatkan_luma(
-    const AVFrame* frame,
+    const Frame_Video& frame,
     int x,
     int y
 ) const
 {
-    if (frame == nullptr) {
+    if (x < 0 || x >= frame.lebar ||
+        y < 0 || y >= frame.tinggi) {
         return 0.0f;
     }
 
-    if (x < 0 || x >= frame->width ||
-        y < 0 || y >= frame->height) {
+    size_t index =
+        static_cast<size_t>(y) *
+        frame.lebar +
+        x;
+
+    if (index >= frame.bidang_Y.size()) {
         return 0.0f;
     }
-
-    /*
-     * Untuk AV_PIX_FMT_YUV420P:
-     *
-     * data[0] = Y plane
-     * linesize[0] = ukuran sebenarnya satu baris
-     */
 
     return static_cast<float>(
-        frame->data[0][y * frame->linesize[0] + x]
+        frame.bidang_Y[index]
     );
 }
-
 void Optical_Flow_Differention::hitung_turunan(
-    const AVFrame* frame1,
-    const AVFrame* frame2,
+    const Frame_Video& frame1,
+    const Frame_Video& frame2,
     int x,
     int y
-) {
-    if (frame1 == nullptr || frame2 == nullptr) {
-        return;
-    }
-
+)
+{
     float I_kanan =
         mendapatkan_luma(frame1, x + 1, y);
 
     float I_kiri =
         mendapatkan_luma(frame1, x - 1, y);
 
-
     float I_bawah =
         mendapatkan_luma(frame1, x, y + 1);
 
     float I_atas =
         mendapatkan_luma(frame1, x, y - 1);
-
 
     float I_sekarang =
         mendapatkan_luma(frame1, x, y);
